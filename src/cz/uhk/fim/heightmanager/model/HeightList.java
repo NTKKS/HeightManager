@@ -18,4 +18,8 @@ public class HeightList {
         return itemList.size();
     }
 
+    public void removeItem(int index){
+        itemList.remove(index);
+    }
+
 }

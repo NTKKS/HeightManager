@@ -33,7 +33,7 @@ public class HeightTable extends AbstractTableModel {
             case 1:
                 return item.getPrijmeni();
             case 2:
-                return item.getDateTime();
+                return item.getDatumZapisu();
             case 3:
                 return item.getVyska();
             case 4:

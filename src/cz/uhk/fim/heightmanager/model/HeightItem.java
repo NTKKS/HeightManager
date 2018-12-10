@@ -1,25 +1,21 @@
 package cz.uhk.fim.heightmanager.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class HeightItem {
     private String jmeno;
     private String prijmeni;
     private double vyska;
     private boolean dostacuje;
-    private String dateTime;
-
-    Date date = new Date();
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    private String datumZapisu;
 
     public HeightItem() {
     }
 
-    public HeightItem(String jmeno, String prijmeni, double vyska) {
+    public HeightItem(String jmeno, String prijmeni, double vyska, String datumZapisu) {
         this.jmeno = jmeno;
         this.prijmeni = prijmeni;
         this.vyska = vyska;
+        this.datumZapisu = datumZapisu;
+
     }
 
     public String getJmeno() {
@@ -47,18 +43,18 @@ public class HeightItem {
     }
 
     public boolean isDostacuje() {
-        return vyska > 195;
+        return vyska >= 195;
     }
 
     public void setDostacuje(boolean dostacuje) {
         this.dostacuje = dostacuje;
     }
 
-    public String getDateTime() {
-        return dateTime;
+    public String getDatumZapisu() {
+        return datumZapisu;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
+    public void setDatumZapisu(String datumZapisu) {
+        this.datumZapisu = datumZapisu;
     }
 }
