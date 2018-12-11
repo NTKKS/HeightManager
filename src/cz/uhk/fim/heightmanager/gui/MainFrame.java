@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MainFrame extends JFrame {
@@ -166,9 +168,9 @@ public class MainFrame extends JFrame {
                         itm.setJmeno(txtName.getText());
                         itm.setPrijmeni(txtSurName.getText());
                         itm.setVyska(Double.parseDouble(txtHeight.getText()));
-                        itm.setDatumZapisu(null);
+                        itm.setDatumZapisu(setDate());
                     } else {
-                        item = new HeightItem(txtName.getText(), txtSurName.getText(), Double.parseDouble(txtHeight.getText()), null);
+                        item = new HeightItem(txtName.getText(), txtSurName.getText(), Double.parseDouble(txtHeight.getText()), setDate());
                         heightList.addItem(item);
                     }
                     model.setList(heightList);
@@ -183,6 +185,14 @@ public class MainFrame extends JFrame {
                 dlgAdd.dispose();
             }
         });
+    }
+
+    private String setDate() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd:MM:yyyy hh:mm:ss");
+        String dt = sdf.format(date);
+        return dt;
+
     }
 
     private boolean validateInput(String text) {
