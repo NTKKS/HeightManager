@@ -22,4 +22,14 @@ public class HeightList {
         itemList.remove(index);
     }
 
+    public List<HeightItem> getBigItems(){
+        List<HeightItem> tall = new ArrayList<>();
+        for (int i = 0; i < itemList.size(); i++) {
+            if (itemList.get(i).isDostacuje()){
+                tall.add(itemList.get(i));
+            }
+        }
+        return tall;
+    }
+
 }

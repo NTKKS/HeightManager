@@ -4,8 +4,8 @@ public class HeightItem {
     private String jmeno;
     private String prijmeni;
     private double vyska;
-    private boolean dostacuje;
     private String datumZapisu;
+    private boolean dostacuje;
 
     public HeightItem() {
     }
@@ -34,7 +34,7 @@ public class HeightItem {
         this.prijmeni = prijmeni;
     }
 
-    public double getVyska() {
+    public Double getVyska() {
         return vyska;
     }
 
@@ -57,4 +57,6 @@ public class HeightItem {
     public void setDatumZapisu(String datumZapisu) {
         this.datumZapisu = datumZapisu;
     }
+
+
 }

@@ -4,7 +4,6 @@ import cz.uhk.fim.heightmanager.model.HeightItem;
 import cz.uhk.fim.heightmanager.model.HeightList;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.Date;
 
 public class HeightTable extends AbstractTableModel {
     private HeightList heightList;
@@ -85,7 +84,7 @@ public class HeightTable extends AbstractTableModel {
             case 1:
                 return String.class;
             case 2:
-                return Date.class;
+                return String.class;
             case 3:
                 return Double.class;
             case 4:

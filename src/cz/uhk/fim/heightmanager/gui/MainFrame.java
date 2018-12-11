@@ -1,5 +1,6 @@
 package cz.uhk.fim.heightmanager.gui;
 
+import cz.uhk.fim.heightmanager.model.FileUtil;
 import cz.uhk.fim.heightmanager.model.HeightItem;
 import cz.uhk.fim.heightmanager.model.HeightList;
 
@@ -7,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class MainFrame extends JFrame {
 
@@ -19,9 +21,10 @@ public class MainFrame extends JFrame {
     private static final String IO_LOAD_TYPE = "IO_LOAD_TYPE";
     private static final String IO_SAVE_TYPE = "IO_SAVE_TYPE";
     private JLabel lblErrorMessage;
+    private FileUtil fileUtil;
 
 
-    public MainFrame(){
+    public MainFrame() {
         init();
     }
 
@@ -33,10 +36,19 @@ public class MainFrame extends JFrame {
 
         model = new HeightTable();
         heightList = new HeightList();
-        heightList.addItem(new HeightItem("Karel","Patočka",200,null));
+        //heightList.addItem(new HeightItem("Karel","Patočka",200,null));
         model.setList(heightList);
+        fileUtil = new FileUtil();
 
+        loadData();
         initContentUI();
+    }
+
+    private void loadData() {
+        List<HeightItem> src = FileUtil.loadSources();
+        for (int i = 0; i < FileUtil.loadSources().size(); i++) {
+            heightList.addItem(src.get(i));
+        }
     }
 
     private void initContentUI() {
@@ -68,12 +80,12 @@ public class MainFrame extends JFrame {
 
         table = new JTable();
         table.setModel(model);
-        add(new JScrollPane(table),BorderLayout.CENTER);
+        add(new JScrollPane(table), BorderLayout.CENTER);
 
         btnEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (table.getSelectedRow()!=-1){
+                if (table.getSelectedRow() != -1) {
                     initAddDialog(table);
                 }
             }
@@ -89,6 +101,12 @@ public class MainFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 heightList.removeItem(table.getSelectedRow());
                 model.setList(heightList);
+            }
+        });
+        btnSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FileUtil.saveSources(heightList.getBigItems());
             }
         });
     }
@@ -109,19 +127,19 @@ public class MainFrame extends JFrame {
         JTextField txtHeight = new JTextField();
         JLabel lblHeight = new JLabel("Výška:");
 
-        if (table!=null){
-           txtName.setText((String) table.getValueAt(table.getSelectedRow(),0));
-           txtSurName.setText((String) table.getValueAt(table.getSelectedRow(),1));
-           txtHeight.setText(String.valueOf(table.getValueAt(table.getSelectedRow(),3)));
+        if (table != null) {
+            txtName.setText((String) table.getValueAt(table.getSelectedRow(), 0));
+            txtSurName.setText((String) table.getValueAt(table.getSelectedRow(), 1));
+            txtHeight.setText(String.valueOf(table.getValueAt(table.getSelectedRow(), 3)));
         }
 
         JButton btnOK = new JButton("Přidej");
         JButton btnCancel = new JButton("Zruš");
 
         JPanel pnlFields = new JPanel();
-        pnlFields.setLayout(new GridLayout(6,1));
-        pnlFields.setBorder(BorderFactory.createEmptyBorder(5,30,0,30));
-        dlgAdd.add(pnlFields,BorderLayout.NORTH);
+        pnlFields.setLayout(new GridLayout(6, 1));
+        pnlFields.setBorder(BorderFactory.createEmptyBorder(5, 30, 0, 30));
+        dlgAdd.add(pnlFields, BorderLayout.NORTH);
         pnlFields.add(lblName);
         pnlFields.add(txtName);
         pnlFields.add(lblSurName);
@@ -129,22 +147,30 @@ public class MainFrame extends JFrame {
         pnlFields.add(lblHeight);
         pnlFields.add(txtHeight);
         JPanel pnlBtns = new JPanel();
-        dlgAdd.add(pnlBtns,BorderLayout.CENTER);
+        dlgAdd.add(pnlBtns, BorderLayout.CENTER);
         pnlBtns.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        pnlBtns.setBorder(BorderFactory.createEmptyBorder(0,0,0,25));
+        pnlBtns.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 25));
         pnlBtns.add(btnOK);
         pnlBtns.add(btnCancel);
 
-        dlgAdd.add(lblErrorMessage,BorderLayout.SOUTH);
+        dlgAdd.add(lblErrorMessage, BorderLayout.SOUTH);
         lblErrorMessage.setVisible(false);
 
         //listenery
         btnOK.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (isHeight(txtHeight.getText())&&validateInput(txtName.getText())&&validateInput(txtSurName.getText())){
-                    item = new HeightItem(txtName.getText(),txtSurName.getText(),Double.parseDouble(txtHeight.getText()),null);
-                    heightList.addItem(item);
+                if (isHeight(txtHeight.getText()) && validateInput(txtName.getText()) && validateInput(txtSurName.getText())) {
+                    if (table != null) {
+                        HeightItem itm = heightList.getItemByIndex(table.getSelectedRow());
+                        itm.setJmeno(txtName.getText());
+                        itm.setPrijmeni(txtSurName.getText());
+                        itm.setVyska(Double.parseDouble(txtHeight.getText()));
+                        itm.setDatumZapisu(null);
+                    } else {
+                        item = new HeightItem(txtName.getText(), txtSurName.getText(), Double.parseDouble(txtHeight.getText()), null);
+                        heightList.addItem(item);
+                    }
                     model.setList(heightList);
                     dlgAdd.dispose();
                 }
